@@ -25,7 +25,7 @@ namespace XlsWxg
 
             return ReplaceFiles(strPath, searchPattern, pattern, 1, newConnectionString);
         }
-     
+
         [ExcelFunction(Category = "File", Description = "Replace string in text file under directory")]
         public static string ReplaceFiles(string diretoryName, string searchPattern, string pattern, int groupIndex, string replacement)
         {
@@ -78,14 +78,14 @@ namespace XlsWxg
         {
             return ReplaceFile(new FileInfo(filePath), searchPattern, pattern, groupIndex, replacement);
         }
-        
+
         public static void Log(string content)
         {
             string isWriteLog = ConfigurationManager.AppSettings.Get("writeLog");
             bool writeLog = false;
             bool.TryParse(isWriteLog, out writeLog);
             if (!writeLog) return;
-            
+
             string currPath = Environment.CurrentDirectory + "\\Application_" + DateTime.Today.ToString("yyyyMMdd") + ".log";
             File.AppendAllText(currPath, content, Encoding.UTF8);
         }
@@ -100,7 +100,7 @@ namespace XlsWxg
                 string oldFileName = fi.FullName;
                 string input = File.ReadAllText(fi.FullName);
                 string replaced = UtilWxg.ReplaceMatchGroup(input, pattern, groupIndex, replacement);
-                if(!input.Equals(replaced))
+                if (!input.Equals(replaced))
                 {
                     isChanged = true;
                     fi.MoveTo(fi.FullName + DateTime.Now.ToString("_yyyyMMddhhmmss.bak"));
@@ -109,7 +109,7 @@ namespace XlsWxg
             }
             return isChanged;
         }
-       
+
 
 
         #endregion

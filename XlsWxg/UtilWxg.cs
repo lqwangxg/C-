@@ -35,7 +35,7 @@ namespace XlsWxg
 
             pattern = "\\[\\s*" + key + "\\s*\\]";
             input = ReplaceMatchGroup(input, pattern, 0, value);
-            
+
             pattern = "(:\\s*" + key + ")\\W";
             input = ReplaceMatchGroup(input, pattern, 1, value);
 

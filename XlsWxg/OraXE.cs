@@ -2,12 +2,9 @@
 using Oracle.ManagedDataAccess.Client;
 using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Data;
 using System.Data.Common;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace XlsWxg
 {
@@ -22,7 +19,7 @@ namespace XlsWxg
                 using (var con = new OracleConnection(dataSource))
                 {
                     con.Open();
-                    DbTransaction transaction =  con.BeginTransaction();
+                    DbTransaction transaction = con.BeginTransaction();
 
                     string[] sqls = batchSQL.Split(";".ToCharArray());
                     foreach (var sql in sqls)
@@ -55,7 +52,7 @@ namespace XlsWxg
             }
             return string.Join(";", lstValue);
         }
-        
+
         [ExcelFunction(Category = "Database", Description = "Select By SQL, Return Data Arrays.")]
         public static string Query([ExcelArgument(Description = "select cols from tables where ...", Name = "sql")]string sql, string dataSource)
         {
@@ -67,7 +64,7 @@ namespace XlsWxg
                     adapter.Fill(ds);
                 }
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 IOWxg.Log(ex.StackTrace);
                 return "error:" + ex.Message;
@@ -88,20 +85,24 @@ namespace XlsWxg
                     con.Open();
                     OracleCommand cmd = new OracleCommand(sql, con);
                     retValue = cmd.ExecuteScalar();
+                    if (retValue.Equals(DBNull.Value))
+                    {
+                        return string.Empty;
+                    }
                 }
             }
             catch (Exception ex)
             {
                 retValue = "error:" + ex.Message;
                 IOWxg.Log(ex.Message);
-            }            
+            }
             return retValue;
         }
 
         [ExcelFunction(Category = "Database", Description = "Insert Update or Delete by ExecuteNoQuery, Return int.")]
         public static string Update([ExcelArgument(Description = "select cols from tables where ...", Name = "sql")]string sql, string dataSource)
         {
-             
+
             string retValue;
             try
             {
@@ -116,9 +117,9 @@ namespace XlsWxg
             }
             catch (Exception ex)
             {
-                retValue = "error:"+ ex.Message;
+                retValue = "error:" + ex.Message;
                 IOWxg.Log(ex.StackTrace);
-            }            
+            }
             return retValue;
         }
 
